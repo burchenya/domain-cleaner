@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get "Clean Domain" from URLs</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 2rem;
+            line-height: 1.4;
+        }
+
+        .emphasis {
+            color: #2980b9;
+            font-weight: 600;
+            padding: 0.2rem 0.4rem;
+            background-color: #f7f9fc;
+            border-radius: 4px;
+            border: 1px solid #e1e8f0;
+        }
+
+        .description {
+            color: #555;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .description code {
+            background-color: #e9ecef;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        .description ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .description .warning {
+            color: #e74c3c;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        .input-group, .output-group {
+            margin-bottom: 1.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            margin-bottom: 1rem;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .copy-button {
+            background-color: #2ecc71;
+        }
+
+        .copy-button:hover {
+            background-color: #27ae60;
+        }
+
+        .copy-button.success {
+            animation: success-pulse 0.5s ease;
+        }
+
+        @keyframes success-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .stats {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .error {
+            color: #e74c3c;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Get <span class="emphasis">"Clean Domain"</span><br>from List of URLs</h1>
+        
+        <div class="description">
+            This tool extracts and normalizes domain names from URLs. It removes protocols (http/https), 'www' prefixes, and subdomains while correctly handling special TLDs (like .co.uk).
+            
+            <ul>
+                <li><code>https://www.example.com/path</code> → <code>example.com</code></li>
+                <li><code>blog.domain.co.uk</code> → <code>domain.co.uk</code></li>
+                <li><code>sub.store.company.com</code> → <code>company.com</code></li>
+            </ul>
+
+            <div class="warning">⚠️ Note: This tool assumes all input URLs are correctly formatted. It will not validate or fix typos in domain names. Always verify your input URLs are correct.</div>
+        </div>
+        
+        <div class="input-group">
+            <h3>Input URLs (one per line)</h3>
+            <textarea id="input" placeholder="Enter URLs here, one per line&#10;Example:&#10;https://www.example.com/path&#10;http://sub.domain.co.uk/"></textarea>
+            <button id="clean" onclick="cleanDomains()">Clean Domains</button>
+        </div>
+
+        <div class="output-group">
+            <h3>Cleaned Domains</h3>
+            <textarea id="output" readonly placeholder="Cleaned domains will appear here"></textarea>
+            <div class="button-group">
+                <button id="copy" class="copy-button" onclick="copyToClipboard()">Copy to Clipboard</button>
+            </div>
+            <div class="stats" id="stats"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/publicsuffixlist@1.0.3/dist/publicsuffixlist.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 

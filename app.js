@@ -93,15 +93,7 @@ function cleanDomain(url) {
 
         if (psl) {
             try {
-                // Get the public suffix for this domain
-                const suffix = psl.getPublicSuffix(hostname);
-                
-                // If the hostname is the same as the public suffix, return it
-                if (hostname === suffix) {
-                    return hostname;
-                }
-
-                // Get the registrable domain
+                // Get the registrable domain using PSL
                 const domain = psl.getDomain(hostname);
                 if (domain) {
                     return domain;
@@ -113,6 +105,8 @@ function cleanDomain(url) {
 
         // Fallback method if PSL is not loaded or fails
         const parts = hostname.split('.');
+        
+        // If we have 2 parts or fewer, return as is
         if (parts.length <= 2) return hostname;
 
         // Known multi-part TLDs
@@ -130,9 +124,8 @@ function cleanDomain(url) {
             }
         }
 
-        // Default case: return last three parts for domains with more than 3 parts,
-        // otherwise return the whole hostname
-        return parts.length > 3 ? parts.slice(-3).join('.') : hostname;
+        // For all other cases, return just the domain and TLD (last two parts)
+        return parts.slice(-2).join('.');
     } catch (error) {
         console.error('Error processing URL:', url, error);
         return url; // Return original input if processing fails
